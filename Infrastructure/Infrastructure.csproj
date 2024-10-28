@@ -10,7 +10,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <EmbeddedResource Include="SqlScripts\001 - Create Notes table.sql" />
+      <EmbeddedResource Include="SqlScripts\*.sql" />
     </ItemGroup>
 
     <ItemGroup>

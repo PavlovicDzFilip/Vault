@@ -1,12 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Vault.WebApi.Domain;
 using Vault.WebApi.Domain.Notes;
 
 namespace Vault.WebApi.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class NotesController(NoteRepository noteRepository, VaultDbContext vaultDbContext)
+public class NotesController(NoteRepository noteRepository)
     : ControllerBase
 {
     [HttpGet]
@@ -22,14 +21,13 @@ public class NotesController(NoteRepository noteRepository, VaultDbContext vault
     }
     
     [HttpPost]
-    public async Task<long> Create(CreateNoteDto createNoteDto, CancellationToken cancellationToken)
+    public long Create(CreateNoteDto createNoteDto)
     {
         var note = Note.Create(
             new NoteTitle(createNoteDto.Title), 
             new NoteContent(createNoteDto.Content));
 
         noteRepository.Add(note);
-        await vaultDbContext.SaveChangesAsync(cancellationToken);
         
         return note.Id;
     }
@@ -45,7 +43,6 @@ public class NotesController(NoteRepository noteRepository, VaultDbContext vault
             new NoteContent(updateNoteDto.Content));
         
         noteRepository.Update(note);
-        await vaultDbContext.SaveChangesAsync(cancellationToken);
     }
 
     public record NoteListItem(long Id, string Title, DateTime LastModifiedAt);
