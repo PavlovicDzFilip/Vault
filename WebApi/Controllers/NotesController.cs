@@ -20,16 +20,16 @@ public class NotesController(NoteRepository noteRepository, VaultDbContext dbCon
 
         return noteDtos;
     }
-    
+
     [HttpPost]
     public long Create(CreateNoteDto createNoteDto)
     {
         var note = Note.Create(
-            new NoteTitle(createNoteDto.Title), 
+            new NoteTitle(createNoteDto.Title),
             new NoteContent(createNoteDto.Content));
 
         noteRepository.Add(note);
-        
+
         return note.Id;
     }
 
@@ -38,15 +38,17 @@ public class NotesController(NoteRepository noteRepository, VaultDbContext dbCon
     {
         var noteId = NoteId.Parse(id);
         var note = await noteRepository.Get(noteId, cancellationToken);
-        
+
         note.Update(
-            new NoteTitle(updateNoteDto.Title), 
+            new NoteTitle(updateNoteDto.Title),
             new NoteContent(updateNoteDto.Content));
-        
+
         noteRepository.Update(note);
     }
 
     public record NoteListItem(long Id, string Title, DateTime LastModifiedAt);
+
     public record CreateNoteDto(string Title, string Content);
+
     public record UpdateNoteDto(string Title, string Content);
 }

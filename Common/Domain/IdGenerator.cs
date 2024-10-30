@@ -11,7 +11,7 @@ public static class IdGenerator
     {
         return Generator.CreateId();
     }
-    
+
     private static int GetUniqueGeneratorIdFromIpAddress()
     {
         var host = Dns.GetHostEntry(Dns.GetHostName());

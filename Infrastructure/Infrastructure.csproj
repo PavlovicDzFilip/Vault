@@ -10,15 +10,15 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <EmbeddedResource Include="SqlScripts\*.sql" />
+        <EmbeddedResource Include="SqlScripts\*.sql"/>
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="dbup-sqlserver" Version="6.0.0" />
+        <PackageReference Include="dbup-sqlserver" Version="6.0.0"/>
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\WebApi\WebApi.csproj" />
+        <ProjectReference Include="..\WebApi\WebApi.csproj"/>
     </ItemGroup>
 
 </Project>

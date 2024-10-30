@@ -10,8 +10,6 @@ public record NoteTitle : SingleValueObject<NoteTitle, string>
     {
         if (string.IsNullOrEmpty(Value) ||
             Value.Length > MaxLength)
-        {
             throw new ArgumentException($"'{nameof(Value)}' cannot be longer than {MaxLength} characters.");
-        }
     }
 }

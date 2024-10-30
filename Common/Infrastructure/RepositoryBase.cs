@@ -14,10 +14,7 @@ public abstract class RepositoryBase<T, TId>(DbContext context)
     public async Task<T> Get(TId id, CancellationToken cancellationToken = default)
     {
         var entity = await GetOrDefault(id, cancellationToken);
-        if (entity is null)
-        {
-            throw new EntityNotFoundException();
-        }
+        if (entity is null) throw new EntityNotFoundException();
 
         return entity;
     }

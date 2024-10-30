@@ -4,14 +4,14 @@ namespace Vault.WebApi.Domain.Notes;
 
 public class Note : AggregateRoot<NoteId>
 {
-    public NoteTitle Title { get; private set; }
-    public NoteContent Content { get; private set; }
-
     private Note(NoteId id, NoteTitle title, NoteContent content) : base(id)
     {
         Title = title;
         Content = content;
     }
+
+    public NoteTitle Title { get; private set; }
+    public NoteContent Content { get; private set; }
 
     public static Note Create(NoteTitle title, NoteContent content)
     {

@@ -12,7 +12,7 @@ public sealed class UpdateAggregateRootInterceptor : SaveChangesInterceptor
         return base.SavingChanges(eventData, result);
     }
 
-    public override ValueTask<InterceptionResult<int>> SavingChangesAsync(DbContextEventData eventData, InterceptionResult<int> result, CancellationToken cancellationToken = new CancellationToken())
+    public override ValueTask<InterceptionResult<int>> SavingChangesAsync(DbContextEventData eventData, InterceptionResult<int> result, CancellationToken cancellationToken = new())
     {
         UpdateAggregateRootModifiedDate(eventData);
         return base.SavingChangesAsync(eventData, result, cancellationToken);
