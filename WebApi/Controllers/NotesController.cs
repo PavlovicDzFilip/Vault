@@ -1,11 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Vault.WebApi.Domain;
 using Vault.WebApi.Domain.Notes;
 
 namespace Vault.WebApi.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class NotesController(NoteRepository noteRepository)
+public class NotesController(NoteRepository noteRepository, VaultDbContext dbContext)
     : ControllerBase
 {
     [HttpGet]

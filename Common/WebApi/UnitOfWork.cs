@@ -9,6 +9,4 @@ public class UnitOfWork<TDbContext>(TDbContext dbContext) : IUnitOfWork
     {
         await dbContext.SaveChangesAsync(cancellationToken);
     }
-
-    public bool HasChanges() => dbContext.ChangeTracker.HasChanges();
 }

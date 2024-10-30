@@ -1,19 +1,22 @@
-﻿using System.Linq.Expressions;
-using System.Reflection;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Vault.Common.Domain;
+using Vault.Common.Infrastructure.ExecutionContexts;
 using Vault.Common.Infrastructure.Interceptors;
 
 namespace Vault.Common.Infrastructure;
 
-public abstract class DbContextBase(DbContextOptions options) : DbContext(options)
+public abstract class DbContextBase(DbContextOptions options, IExecutionContext executionContext) :
+    DbContext(options)
 {
+    public IExecutionContext ExecutionContext { get; } = executionContext;
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.AddInterceptors(new AggregateRootInterceptor());
-        optionsBuilder.UseQueryTrackingBehavior(QueryTrackingBehavior.TrackAll);
+        optionsBuilder.AddInterceptors(new UpdateAggregateRootInterceptor());
+        optionsBuilder.AddInterceptors(new ThrowOnMultipleSaveChangesInterceptor());
+        optionsBuilder.AddInterceptors(new ThrowOnSynchronousSaveChangesInterceptor());
+        optionsBuilder.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
         base.OnConfiguring(optionsBuilder);
     }
 
@@ -34,36 +37,15 @@ public abstract class DbContextBase(DbContextOptions options) : DbContext(option
                         modelBuilder.Entity(entityType.ClrType)
                             .Property(property.Name)
                             .HasConversion(converterInstance);
-                        
+
                         break;
                     }
-                    
+
                     baseType = baseType.BaseType;
                 }
             }
         }
 
         base.OnModelCreating(modelBuilder);
-    }
-}
-
-public static class PropertyBuilderExtensions
-{
-    public static void IsSingleValueObject<T, TValue>(this PropertyBuilder<T> propertyBuilder)
-        where T : SingleValueObject<T, TValue>
-        where TValue : IComparable<TValue>
-    {
-        propertyBuilder.HasConversion(new SingleValueObjectConverter<T, TValue>());
-    }
-}
-
-public class SingleValueObjectConverter<T, TValue> : ValueConverter<T, TValue>
-    where T : SingleValueObject<T, TValue>
-    where TValue : IComparable<TValue>
-{
-    public SingleValueObjectConverter() : base(
-        valueObject => valueObject.Value,
-        value => (T)Activator.CreateInstance(typeof(T), value)!)
-    {
     }
 }

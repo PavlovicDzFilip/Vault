@@ -16,17 +16,12 @@ public sealed class UnitOfWorkFilter : IAsyncActionFilter
         }
 
         var unitOfWork = context.HttpContext.RequestServices.GetRequiredService<IUnitOfWork>();
-
-        if (!unitOfWork.HasChanges())
-        {
-            return;
-        }
-
         var stateModifyingHttpMethods = new[] { HttpMethod.Put, HttpMethod.Delete, HttpMethod.Patch, HttpMethod.Post };
         var httpMethod = HttpMethod.Parse(context.HttpContext.Request.Method);
         if (stateModifyingHttpMethods.Contains(httpMethod))
         {
             await unitOfWork.Commit(context.HttpContext.RequestAborted);
+            return;
         }
 
         throw new NotSupportedException($"State is changed on {httpMethod.Method} http method");
