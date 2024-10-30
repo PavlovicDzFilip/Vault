@@ -4,7 +4,7 @@ using Vault.Common.Domain;
 
 namespace Vault.Common.Infrastructure.Interceptors;
 
-public class AggregateRootInterceptor : SaveChangesInterceptor
+public sealed class UpdateAggregateRootInterceptor : SaveChangesInterceptor
 {
     public override InterceptionResult<int> SavingChanges(DbContextEventData eventData, InterceptionResult<int> result)
     {
@@ -12,8 +12,7 @@ public class AggregateRootInterceptor : SaveChangesInterceptor
         return base.SavingChanges(eventData, result);
     }
 
-
-    public override ValueTask<InterceptionResult<int>> SavingChangesAsync(DbContextEventData eventData, InterceptionResult<int> result, CancellationToken cancellationToken = new CancellationToken())
+    public override ValueTask<InterceptionResult<int>> SavingChangesAsync(DbContextEventData eventData, InterceptionResult<int> result, CancellationToken cancellationToken = new())
     {
         UpdateAggregateRootModifiedDate(eventData);
         return base.SavingChangesAsync(eventData, result, cancellationToken);

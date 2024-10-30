@@ -4,6 +4,7 @@ using DbUp.Engine.Output;
 using Microsoft.Extensions.Configuration;
 
 namespace Vault.Infrastructure;
+
 public class Deployment(IConfiguration configuration, IUpgradeLog upgradeLog)
 {
     public void DeployInfrastructure()
@@ -24,9 +25,6 @@ public class Deployment(IConfiguration configuration, IUpgradeLog upgradeLog)
                 .Build()
                 .PerformUpgrade();
 
-        if (!result.Successful)
-        {
-            Environment.Exit(-1);
-        }
+        if (!result.Successful) Environment.Exit(-1);
     }
 }
