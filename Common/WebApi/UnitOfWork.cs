@@ -2,7 +2,7 @@
 
 namespace Vault.Common.WebApi;
 
-public class UnitOfWork<TDbContext>(TDbContext dbContext) : IUnitOfWork
+internal class UnitOfWork<TDbContext>(TDbContext dbContext) : IUnitOfWork
     where TDbContext : DbContextBase
 {
     public async Task Commit(CancellationToken cancellationToken = default)
