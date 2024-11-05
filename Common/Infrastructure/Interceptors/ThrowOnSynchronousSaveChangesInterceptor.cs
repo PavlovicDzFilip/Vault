@@ -8,5 +8,5 @@ internal sealed class ThrowOnSynchronousSaveChangesInterceptor : SaveChangesInte
     public override InterceptionResult<int> SavingChanges(DbContextEventData eventData, InterceptionResult<int> result)
         => throw new SynchronousSaveChangesForbiddenException();
 
-    private sealed class SynchronousSaveChangesForbiddenException : VaultException;
+    internal sealed class SynchronousSaveChangesForbiddenException : VaultException;
 }

@@ -19,7 +19,7 @@ internal class ThrowOnMultipleSaveChangesInterceptor : SaveChangesInterceptor
         return base.SavingChangesAsync(eventData, result, cancellationToken);
     }
 
-    private sealed class MultipleSaveChangesInvocationException : VaultException;
+    internal sealed class MultipleSaveChangesInvocationException : VaultException;
 
     private sealed class Marker;
 }
