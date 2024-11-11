@@ -1,12 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Vault.WebApi.Domain;
 using Vault.WebApi.Domain.Notes;
 
 namespace Vault.WebApi.Controllers;
 
 [ApiController]
-[Route("[controller]")]
-public class NotesController(NoteRepository noteRepository, VaultDbContext dbContext)
+[Route("api/[controller]")]
+public class NotesController(NoteRepository noteRepository)
     : ControllerBase
 {
     [HttpGet]
@@ -19,6 +18,15 @@ public class NotesController(NoteRepository noteRepository, VaultDbContext dbCon
             .ToList();
 
         return noteDtos;
+    }
+    
+    [HttpGet("{id}")]
+    public async Task<NoteDto> Get(long id, CancellationToken cancellationToken)
+    {
+        var noteId = NoteId.Parse(id);
+        var note = await noteRepository.Get(noteId, cancellationToken);
+
+        return new NoteDto(note.Id, note.Title.Value, note.Content.Value, note.ModifiedAt);
     }
 
     [HttpPost]
@@ -46,9 +54,19 @@ public class NotesController(NoteRepository noteRepository, VaultDbContext dbCon
         noteRepository.Update(note);
     }
 
-    public record NoteListItem(long Id, string Title, DateTime LastModifiedAt);
+    [HttpDelete("{id}")]
+    public async Task Delete(long id, CancellationToken cancellationToken)
+    {
+        var noteId = NoteId.Parse(id);
+        var note = await noteRepository.Get(noteId, cancellationToken);
+        noteRepository.Remove(note);
+    }
+
+    public record NoteListItem(long Id, string Title, DateTime ModifiedAt);
 
     public record CreateNoteDto(string Title, string Content);
 
     public record UpdateNoteDto(string Title, string Content);
+    
+    public record NoteDto(long Id, string Title, string Content, DateTime ModifiedAt);
 }
