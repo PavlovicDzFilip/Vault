@@ -12,7 +12,7 @@ public class Note : AggregateRoot<NoteId>
 
     public NoteTitle Title { get; private set; }
     public NoteContent Content { get; private set; }
-
+    
     public static Note Create(NoteTitle title, NoteContent content)
     {
         return new Note(NoteId.NewId(), title, content);

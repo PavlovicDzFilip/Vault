@@ -7,14 +7,18 @@ namespace Vault.Common.Infrastructure;
 
 [UsedImplicitly(ImplicitUseTargetFlags.WithInheritors)]
 public abstract class RepositoryBase<T, TId>(DbContext context)
-    where T : AggregateRoot<TId> where TId : IComparable<TId>
+    where T : AggregateRoot<TId>
+    where TId : StronglyTypedId<TId>, IComparable<TId>
 {
     protected readonly DbSet<T> DbSet = context.Set<T>();
 
     public async Task<T> Get(TId id, CancellationToken cancellationToken = default)
     {
         var entity = await GetOrDefault(id, cancellationToken);
-        if (entity is null) throw new EntityNotFoundException();
+        if (entity is null)
+        {
+            throw new EntityNotFoundException(id.Value.ToString(), typeof(T));
+        }
 
         return entity;
     }
@@ -52,10 +56,4 @@ public abstract class RepositoryBase<T, TId>(DbContext context)
         ArgumentNullException.ThrowIfNull(aggregate);
         DbSet.Remove(aggregate);
     }
-}
-
-[UsedImplicitly(ImplicitUseTargetFlags.WithInheritors)]
-public abstract class RepositoryBase<T>(DbContext context) : RepositoryBase<T, long>(context)
-    where T : AggregateRoot<long>
-{
 }

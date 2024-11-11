@@ -24,6 +24,9 @@ public sealed class UnitOfWorkFilter : IAsyncActionFilter
             return;
         }
 
-        throw new NotSupportedException($"State is changed on {httpMethod.Method} http method");
+        if (unitOfWork.HasChanges())
+        {
+            throw new NotSupportedException($"State is changed on {httpMethod.Method} http method");
+        }
     }
 }

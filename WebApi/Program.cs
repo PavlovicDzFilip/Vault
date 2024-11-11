@@ -4,6 +4,9 @@ using Vault.WebApi;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddVaultExceptionHandling();
+
+Startup.Configure(builder.Services, builder.Configuration);
 
 builder.Services.AddControllers(options => options.Filters.Add<UnitOfWorkFilter>());
 
@@ -11,10 +14,10 @@ builder.Services.AddControllers(options => options.Filters.Add<UnitOfWorkFilter>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-Startup.Configure(builder.Services, builder.Configuration);
 
 var app = builder.Build();
 
+app.UseExceptionHandler();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
