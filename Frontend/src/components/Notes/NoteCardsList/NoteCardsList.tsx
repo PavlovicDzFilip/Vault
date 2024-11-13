@@ -1,16 +1,31 @@
-import { ReactElement } from 'react';
-import { NoteCard, NoteProps } from '../NoteCard/NoteCard.tsx';
+import {ReactElement, useEffect, useState} from 'react';
+import {NoteCard} from '../NoteCard/NoteCard.tsx';
+import API, {NoteListItem} from "../../../Api.ts";
 
-type NotesListProps = {
-  notes: NoteProps[];
-};
+export const NoteCardsList = (): ReactElement => {
+    const [notes, setNotes] = useState<NoteListItem[]>([]);
 
-export const NoteCardsList = ({ notes }: NotesListProps): ReactElement => {
-  return (
-    <>
-      {notes.map((note) => (
-        <NoteCard key={note.title} title={note.title} content={note.content} />
-      ))}
-    </>
-  );
+    useEffect(() => {
+        const loadNotes = async () => {
+            const loadedNotes = await API.notes.getAll();
+            if (!ignore) {
+                setNotes(loadedNotes);
+            }
+        }
+
+        let ignore = false;
+
+        loadNotes();
+        return () => {
+            ignore = true;
+        }
+    }, []);
+
+    return (
+        <>
+            {notes.map((note) => (
+                <NoteCard key={note.id} id={note.id}/>
+            ))}
+        </>
+    );
 };
