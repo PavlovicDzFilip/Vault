@@ -28,10 +28,10 @@ export const initializeApi = (requestService: IRequestService) => {
 const API = {
     notes: {
         getAll (): Promise<NoteListItem[]>  {
-            return service.get<NoteListItem[]>('/Notes');
+            return service.get<NoteListItem[]>('/api/Notes');
         },
         get(id: string): Promise<Note> {
-          return service.get<Note>('/Notes/' + id);
+          return service.get<Note>('/api/Notes/' + id);
         }
     }
 };

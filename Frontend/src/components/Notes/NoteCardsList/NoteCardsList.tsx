@@ -24,7 +24,10 @@ export const NoteCardsList = (): ReactElement => {
     return (
         <>
             {notes.map((note) => (
+                <>
                 <NoteCard key={note.id} id={note.id}/>
+                <hr />
+                </>
             ))}
         </>
     );
