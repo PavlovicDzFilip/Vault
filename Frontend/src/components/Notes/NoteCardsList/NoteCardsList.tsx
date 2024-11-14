@@ -1,6 +1,6 @@
 import {ReactElement, useEffect, useState} from 'react';
 import {NoteCard} from '../NoteCard/NoteCard.tsx';
-import API, {NoteListItem} from "../../../Api.ts";
+import API, {NoteListItem} from "../../../api/Api.ts";
 
 export const NoteCardsList = (): ReactElement => {
     const [notes, setNotes] = useState<NoteListItem[]>([]);

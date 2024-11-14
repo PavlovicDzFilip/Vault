@@ -1,39 +1,28 @@
-import {ReactElement, useEffect, useState} from 'react';
-import API, {Note} from "../../../Api.ts";
+import { ReactElement } from 'react';
+import { useNote } from '../../../hooks/useNote.ts';
 
 export type NoteProps = {
-    id: string;
+  id: string;
 };
 
-export const NoteCard = ({id}: NoteProps): ReactElement => {
+export const NoteCard = ({ id }: NoteProps): ReactElement => {
+  const { note, status, error } = useNote({ id });
 
-    const [note, setNote] = useState<Note | null>(null);
+  if (status === 'error' && error !== null) {
+    return (<div>{error}</div>);
+  }
 
-    useEffect(() => {
-        const loadNote = async () => {
-            const loadedNote = await API.notes.get(id);
-            if (!ignore) {
-                setNote(loadedNote);
-            }
-        }
+  if (status === 'loading' || note === null) {
+    return (<div>loading</div>);
+  }
 
-        let ignore = false;
+  const { title, content, modifiedAt } = note;
 
-        loadNote();
-        return () => {
-            ignore = true;
-        }
-    }, [id]);
-    
-    if(note === null) {
-        return (<div>loading</div>);
-    }
-
-    return (
-        <>
-            <div>Title: {note.title}</div>
-            <div>Content: {note.content}</div>
-            <div>Modified At: {note.modifiedAt}</div>
-        </>
-    );
+  return (
+    <>
+      <div>Title: {title}</div>
+      <div>Content: {content}</div>
+      <div>Modified At: {modifiedAt}</div>
+    </>
+  );
 };
