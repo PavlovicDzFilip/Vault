@@ -9,18 +9,23 @@ import {
 type SingleNoteRequestResult = SuccessfulNoteResult | LoadingResult | ErrorResult;
 
 type UseSingleNote = (params: { id: string }) => {
-  result: SingleNoteRequestResult;
+  result: SingleNoteRequestResult | null;
 };
 
 export const useSingleNote: UseSingleNote = ({ id }) => {
-  const [result, setResult] = useState<SingleNoteRequestResult>(new LoadingResult());
+  const [result, setResult] = useState<SingleNoteRequestResult | null>(new LoadingResult());
 
   useEffect(() => {
     const loadNote = async () => {
       setResult(new LoadingResult());
       try {
         const loadedNote = await API.notes.get(id);
-        if (!ignore) {
+
+        console.log('loadedNote', loadedNote);
+        if (Array.isArray((loadedNote)) && loadedNote.length === 0) {
+          console.log('loadedNote 2222', loadedNote);
+          setResult(null);
+        } else if (!ignore) {
           setResult(new SuccessfulNoteResult(loadedNote));
         }
       } catch (error) {

@@ -1,5 +1,6 @@
 import { Note, NoteListItem } from '../api/Api.ts';
 
+// TODO Update these classes
 export class SuccessfulNoteListItemResult {
   constructor(private readonly noteListItem: NoteListItem) {
     this.noteListItem = noteListItem;
