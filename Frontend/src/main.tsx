@@ -4,7 +4,7 @@ import { Theme } from '@radix-ui/themes';
 import '@radix-ui/themes/styles.css';
 import './index.css';
 import { App } from './App.tsx';
-import {initializeApi, RequestService} from "./api/Api.ts";
+import { initializeApi, RequestService } from './api/Api.ts';
 
 initializeApi(new RequestService('https://localhost:7250'));
 

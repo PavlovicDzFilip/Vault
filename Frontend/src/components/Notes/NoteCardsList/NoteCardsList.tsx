@@ -1,34 +1,21 @@
-import {ReactElement, useEffect, useState} from 'react';
-import {NoteCard} from '../NoteCard/NoteCard.tsx';
-import API, {NoteListItem} from "../../../api/Api.ts";
+import { ReactElement } from 'react';
+import { Card, Flex } from "@radix-ui/themes";
+import { NoteListItem } from '../../../api/Api.ts';
+import { NoteCard } from './NoteCard/NoteCard.tsx';
 
-export const NoteCardsList = (): ReactElement => {
-    const [notes, setNotes] = useState<NoteListItem[]>([]);
+type NoteCardsListProps = {
+  notes: NoteListItem[],
+  onClick: (id: string) => void,
+}
 
-    useEffect(() => {
-        const loadNotes = async () => {
-            const loadedNotes = await API.notes.getAll();
-            if (!ignore) {
-                setNotes(loadedNotes);
-            }
-        }
-
-        let ignore = false;
-
-        loadNotes();
-        return () => {
-            ignore = true;
-        }
-    }, []);
-
-    return (
-        <>
-            {notes.map((note) => (
-                <>
-                <NoteCard key={note.id} id={note.id}/>
-                <hr />
-                </>
-            ))}
-        </>
-    );
-};
+export const NoteCardsList = ({ notes, onClick }: NoteCardsListProps): ReactElement => (
+  <Card>
+    <Flex direction="column" gap="6">
+      {notes.map((note) => (
+        <div onClick={() => onClick(note.id)}>
+          <NoteCard key={note.id} title={note.title}/>
+        </div>
+      ))}
+    </Flex>
+  </Card>
+);
