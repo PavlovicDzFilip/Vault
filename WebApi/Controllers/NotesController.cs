@@ -9,7 +9,7 @@ public class NotesController(NoteRepository noteRepository)
     : ControllerBase
 {
     [HttpGet]
-    public async Task<IEnumerable<NoteListItem>> Get(CancellationToken cancellationToken)
+    public async Task<IEnumerable<NoteListItem>> GetAll(CancellationToken cancellationToken)
     {
         var notes = await noteRepository.GetAll(cancellationToken);
 
@@ -62,11 +62,11 @@ public class NotesController(NoteRepository noteRepository)
         noteRepository.Remove(note);
     }
 
-    public record NoteListItem(long Id, string Title, DateTime ModifiedAt);
+    public record NoteListItem(string Id, string Title, DateTime ModifiedAt);
 
     public record CreateNoteDto(string Title, string Content);
 
     public record UpdateNoteDto(string Title, string Content);
     
-    public record NoteDto(long Id, string Title, string Content, DateTime ModifiedAt);
+    public record NoteDto(string Id, string Title, string Content, DateTime ModifiedAt);
 }

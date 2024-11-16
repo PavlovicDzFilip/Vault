@@ -44,4 +44,7 @@ public abstract record StronglyTypedId<T>(long Value) : SingleValueObject<T, lon
             null
         )!;
     }
+
+    public static implicit operator string(StronglyTypedId<T> id) => id.Value.ToString();
+
 }
