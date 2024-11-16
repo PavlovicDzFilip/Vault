@@ -67,10 +67,10 @@ export const SingleNote = ({ id }: NoteProps): ReactElement => {
 
   // TODO Create separate components for these conditions
   let noteContent =
-    <Box minWidth="300px" minHeight="300px">
+    <Box minWidth="300px" height="100%">
       <Heading as="h1" size="6" weight="bold">
         {/* TODO Update this message */}
-        {currentNote.title ? currentNote.title : "Add a note"}
+        {currentNote.title ? currentNote.title : "Add a note..."}
       </Heading>
       <Box style={{ minHeight: '22px' }}>
         {/* TODO Format the Date properly */}
@@ -91,14 +91,14 @@ export const SingleNote = ({ id }: NoteProps): ReactElement => {
   }
 
   return (
-    <Card>
+    <Card style={{ height: "100%" }}>
       <Flex gap="4">
         <Flex direction="column" gap="3">
           <Box maxWidth="420px">
             <TextArea placeholder="Add a title…" value={currentNote.title} onChange={handleNoteTitleChange}/>
           </Box>
           <Box maxWidth="420px">
-            <TextArea style={{ "height": "300px" }} resize='vertical' placeholder="Add a note…"
+            <TextArea style={{ "minHeight": "300px" }} resize='vertical' placeholder="Add a note…"
                       value={currentNote.content}
                       onChange={handleNoteContentChange}/>
           </Box>
@@ -109,10 +109,12 @@ export const SingleNote = ({ id }: NoteProps): ReactElement => {
           </Card>
         </Flex>
       </Flex>
-      <Flex gap="3">
-        <Button onClick={handleAddNote}>Add Note</Button>
-        <Button onClick={handleCancelNote}>Cancel</Button>
-      </Flex>
+      <Box>
+        <Flex gap="3" style={{ position: "absolute", bottom: "12px", right: "12px" }}>
+          <Button color='gray' onClick={handleAddNote}>Add Note</Button>
+          <Button color='gray' onClick={handleCancelNote}>Cancel</Button>
+        </Flex>
+      </Box>
     </Card>
   );
 };

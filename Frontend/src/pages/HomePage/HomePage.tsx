@@ -10,25 +10,16 @@ export const HomePage = (): ReactElement => {
   const [noteId, setNoteId] = useState<string>('');
   const { result } = useNotes();
 
-  useEffect(() => {
-    // Set default `noteId`
-    // TODO Update this logic
-    if (!noteId && Array.isArray(result) && result.length > 0) {
-      setNoteId(result[0].getNoteListItem().id);
-    }
-  }, [noteId, result]);
-
   // TODO Extract this logic into a separate component
-  // let cardListContent = <Card></Card>;
   let cardListContent =
-    <Card>
+    <Card style={{ height: "100%" }}>
       <Callout.Root>
         <Flex gap='4' align='center'>
           <Callout.Icon>
             <InfoCircledIcon/>
           </Callout.Icon>
           <Callout.Text>
-            Nothing to show.<br/>Add your first note to get started!
+            Nothing to show.<br/>Add your first note!
           </Callout.Text>
         </Flex>
       </Callout.Root>
@@ -40,8 +31,8 @@ export const HomePage = (): ReactElement => {
   }
 
   if (result instanceof LoadingResult) {
-    cardListContent = <Spinner />;
-  } 
+    cardListContent = <Spinner/>;
+  }
 
   if (Array.isArray(result) && result.length > 0) {
     const noteListItems = result.map(item => item.getNoteListItem())
@@ -56,19 +47,12 @@ export const HomePage = (): ReactElement => {
       height: '100vh',
     }} align='center' justify='center'>
       <Card style={{
-        width: '60%',
+        maxWidth: '60%',
+        maxHeight: '70%',
       }}>
-        <Flex gap='5' width='100%' align='center' justify='center'>
-          <Flex flexGrow='0'>
-            <Container width='100%'>
-              {cardListContent}
-            </Container>
-          </Flex>
-          <Flex flexGrow='1'>
-            <Container width='100%'>
-              <SingleNote id={noteId}/>
-            </Container>
-          </Flex>
+        <Flex gap='3' width='100%' style={{ height: "500px" }} align='center' justify='center'>
+          {cardListContent}
+          <SingleNote id={noteId}/>
         </Flex>
       </Card>
     </Flex>

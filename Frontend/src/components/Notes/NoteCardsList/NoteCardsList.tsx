@@ -14,8 +14,8 @@ export const NoteCardsList = ({ notes, onClick }: NoteCardsListProps): ReactElem
   }
 
   return (
-    <Card>
-      <Flex direction="column" gap="6">
+    <Card style={{ height: "100%"}}>
+      <Flex direction="column" gap="6" height="100%">
         {notes.map((note) => (
           <div key={note.id}  onClick={() => onClick(note.id)}>
             <NoteCard title={note.title} onDeleteNote={() => handleDeleteNote(note.id)}/>
