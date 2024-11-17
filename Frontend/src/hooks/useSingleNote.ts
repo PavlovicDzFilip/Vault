@@ -1,48 +1,32 @@
-import { useEffect, useState } from 'react';
-import API from '../api/Api.ts';
-import {
-  SuccessfulNoteResult,
-  LoadingResult,
-  ErrorResult,
-} from '../utils/RequestResult.ts';
+﻿import {useEffect, useState} from 'react';
+import API, {Note,} from '../api/Api.ts';
+import {ErrorResult, LoadingResult, RequestResult, SuccessfulResult} from '../utils/RequestResult.ts';
 
-type SingleNoteRequestResult = SuccessfulNoteResult | LoadingResult | ErrorResult;
+export const useSingleNote = (id: string) => {
+    const [result, setResult] = useState<RequestResult<Note>>(new LoadingResult());
 
-type UseSingleNote = (params: { id: string }) => {
-  result: SingleNoteRequestResult | null;
-};
+    useEffect(() => {
+        let ignore = false;
+        const loadNote = async () => {
+            setResult(new LoadingResult());
+            let newResult: RequestResult<Note>;
+            try {
+                const data = await API.notes.get(id);
+                newResult = new SuccessfulResult(data);
+            } catch (error) {
+                newResult = ErrorResult.Create(error);
+            }
 
-export const useSingleNote: UseSingleNote = ({ id }) => {
-  const [result, setResult] = useState<SingleNoteRequestResult | null>(new LoadingResult());
+            if (!ignore) {
+                setResult(newResult);
+            }
+        };
 
-  useEffect(() => {
-    const loadNote = async () => {
-      setResult(new LoadingResult());
-      try {
-        const loadedNote = await API.notes.get(id);
+        loadNote();
+        return () => {
+            ignore = true;
+        };
+    }, []);
 
-        console.log('loadedNote', loadedNote);
-        if (Array.isArray((loadedNote)) && loadedNote.length === 0) {
-          console.log('loadedNote 2222', loadedNote);
-          setResult(null);
-        } else if (!ignore) {
-          setResult(new SuccessfulNoteResult(loadedNote));
-        }
-      } catch (error) {
-        setResult(
-          error instanceof Error ? error.message : 'Something went wrong',
-        );
-      }
-    };
-
-    let ignore = false;
-
-    loadNote();
-
-    return () => {
-      ignore = true;
-    };
-  }, [id]);
-
-  return { result };
+    return result;
 };

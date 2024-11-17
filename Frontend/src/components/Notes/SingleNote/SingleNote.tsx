@@ -1,19 +1,15 @@
-import { ReactElement, useEffect, useState } from 'react';
-import { Card, Text, Heading, TextArea, Box, Flex, Spinner, Button } from "@radix-ui/themes";
-// import { Note } from "../../../api/Api.ts";
-import { useSingleNote } from '../../../hooks/useSingleNote.ts';
-import {
-  LoadingResult,
-  ErrorResult, SuccessfulNoteResult,
-} from '../../../utils/RequestResult.ts';
-import API, { Note } from "../../../api/Api.ts";
+import {ReactElement, useEffect, useState} from 'react';
+import {Box, Button, Card, Flex, Heading, Spinner, Text, TextArea} from "@radix-ui/themes";
+import API, {Note} from "../../../api/Api.ts";
+import {ErrorResult, LoadingResult, SuccessfulResult} from "../../../utils/RequestResult.ts";
+import {useSingleNote} from "../../../hooks/useSingleNote.ts";
 
 export type NoteProps = {
   id: string;
 };
 
 export const SingleNote = ({ id }: NoteProps): ReactElement => {
-  const { result } = useSingleNote({ id });
+  const result  = useSingleNote(id);
   const [currentNote, setCurrentNote] = useState<Note>({
     id: '',
     title: '',
@@ -22,8 +18,8 @@ export const SingleNote = ({ id }: NoteProps): ReactElement => {
   });
 
   useEffect(() => {
-    if (result instanceof SuccessfulNoteResult) {
-      setCurrentNote(result.getNote());
+    if (result instanceof SuccessfulResult) {
+      setCurrentNote(result.data);
     }
   }, [result]);
 
@@ -82,11 +78,10 @@ export const SingleNote = ({ id }: NoteProps): ReactElement => {
     </Box>;
 
   if (result instanceof ErrorResult) {
-    noteContent = <div>{result.getErrorMessage()}</div>;
+    noteContent = <div>{result.errorMessage}</div>;
   }
 
   if (result instanceof LoadingResult) {
-
     noteContent = <Spinner/>;
   }
 

@@ -1,35 +1,23 @@
-import { Note, NoteListItem } from '../api/Api.ts';
-
-// TODO Update these classes
-export class SuccessfulNoteListItemResult {
-  constructor(private readonly noteListItem: NoteListItem) {
-    this.noteListItem = noteListItem;
-  }
-
-  getNoteListItem() {
-    return this.noteListItem;
-  }
+export class SuccessfulResult<T> {
+    constructor(public readonly data: T) {
+    }
 }
 
-export class SuccessfulNoteResult {
-  constructor(private readonly note: Note) {
-    this.note = note;
-  }
-
-  getNote() {
-    return this.note;
-  }
-}
 
 export class LoadingResult {
 }
 
 export class ErrorResult {
-  constructor(private readonly errorMessage: string) {
-    this.errorMessage = errorMessage;
-  }
+    constructor(public readonly errorMessage: string) {
+    }
 
-  getErrorMessage() {
-    return this.errorMessage;
-  }
+    static Create(error: any, message: string = 'Something went wrong'): ErrorResult {
+        if (error instanceof Error) {
+            return new ErrorResult(error.message);
+        }
+        
+        return new ErrorResult(message);
+    }
 }
+
+export type RequestResult<T> = LoadingResult | ErrorResult | SuccessfulResult<T>;

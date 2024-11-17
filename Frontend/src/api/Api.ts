@@ -19,17 +19,20 @@ export interface IRequestService {
 
 class NullRequestService implements IRequestService {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  // @ts-ignore
   get<T>(path: string): Promise<T> {
     throw new Error('Method not implemented.');
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  // @ts-ignore
   post<T>(path: string, body: T): Promise<T> {
     throw new Error('Method not implemented.');
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  delete(path: string): Promise<T> {
+  // @ts-ignore
+  delete(path: string): Promise<void> {
     throw new Error('Method not implemented.');
   }
 }
@@ -50,7 +53,7 @@ const API = {
     post(note: Note): Promise<Note> {
       return service.post<Note>('/api/Notes', note);
     },
-    delete: (id: string) => {
+    delete: (id: string): Promise<void> => {
       return service.delete('/api/Notes/' + id);
     },
   },

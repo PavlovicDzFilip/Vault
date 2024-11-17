@@ -1,44 +1,36 @@
-import { useEffect, useState } from 'react';
-import API from '../api/Api.ts';
+﻿import {useEffect, useState} from 'react';
+import API, {NoteListItem} from '../api/Api.ts';
 import {
-  ErrorResult,
-  LoadingResult,
-  SuccessfulNoteListItemResult,
+    ErrorResult,
+    LoadingResult,
+    RequestResult, SuccessfulResult,
 } from '../utils/RequestResult.ts';
 
-type NotesRequestResult = SuccessfulNoteListItemResult[] | LoadingResult | ErrorResult;
+export const useNotes = (): RequestResult<NoteListItem[]> => {
+    const [result, setResult] = useState<RequestResult<NoteListItem[]>>(new LoadingResult());
 
-type UseNotes = () => {
-  result: NotesRequestResult;
-};
+    useEffect(() => {
+        let ignore = false;
+        const loadNotes = async () => {
+            setResult(new LoadingResult());
+            let newResult :RequestResult<NoteListItem[]>;
+            try {
+                const data = await API.notes.getAll();
+                newResult = new SuccessfulResult(data);
+            } catch (error) {
+                newResult = ErrorResult.Create(error);
+            }
+            
+            if(!ignore){
+                setResult(newResult);
+            }
+        };
 
-export const useNotes: UseNotes = () => {
-  const [result, setResult] = useState<NotesRequestResult>(new LoadingResult());
+        loadNotes();
+        return () => {
+            ignore = true;
+        };
+    }, []);
 
-  useEffect(() => {
-    const loadNote = async () => {
-      setResult(new LoadingResult());
-      try {
-        const loadedNoteListItems = await API.notes.getAll();
-        if (!ignore) {
-          const noteListItems = loadedNoteListItems.map(noteListItem => new SuccessfulNoteListItemResult(noteListItem));
-          setResult(noteListItems);
-        }
-      } catch (error) {
-        setResult(
-          error instanceof Error ? error.message : 'Something went wrong',
-        );
-      }
-    };
-
-    let ignore = false;
-
-    loadNote();
-
-    return () => {
-      ignore = true;
-    };
-  }, []);
-
-  return { result };
+    return result;
 };
