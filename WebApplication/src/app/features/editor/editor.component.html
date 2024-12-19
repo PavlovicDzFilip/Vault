@@ -1,0 +1,7 @@
+<quill-editor
+  [modules]="editorModules"
+  (onContentChanged)="onContentChanged($event)"
+  (onSelectionChanged)="onSelectionChanged($event)"
+  [placeholder]="'Compose an epic...'"
+  [styles]="{ height: '650px' }"
+/>
