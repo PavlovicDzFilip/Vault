@@ -1,1 +1,20 @@
-<p>toolbar works!</p>
+<div
+  class="flex items-center justify-between p-4 text-white bg-gray-800 rounded-lg shadow-md"
+  role="toolbar"
+  aria-label="Toolbar with actions"
+>
+  @for (toolbar of toolbarItems(); track toolbar.id) {
+    <button
+      class="flex items-center justify-center p-2 bg-gray-700 rounded-md group hover:bg-gray-600 disabled:opacity-50"
+      (click)="executeAction(toolbar.action)"
+      title="Save current state"
+      aria-label="Save current state"
+    >
+      <img
+        src="svgs/{{toolbar.icon}}.svg"
+        alt="Save"
+        class="w-5 h-5 text-gray-400 group-hover:text-white"
+      />
+    </button>
+  }
+</div>

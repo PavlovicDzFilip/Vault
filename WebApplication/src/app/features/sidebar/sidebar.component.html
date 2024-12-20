@@ -1,1 +1,51 @@
-<p>sidebar works!</p>
+<div class="h-screen text-white bg-gray-800">
+  <ul class="p-4">
+    @for (folder of folders(); track folder.id) {
+      <li class="mb-2">
+        <div
+          (click)="toggleFolder(folder)"
+          (keydown)="handleKeydown($event, folder)"
+          tabindex="0"
+          class="flex items-center cursor-pointer"
+        >
+          @if (folder.expanded) {
+            <span class="mr-2">-</span>
+          } @else {
+            <span class="mr-2">+</span>
+          }
+          {{ folder.name }}
+        </div>
+        @if (folder.expanded) {
+          <ul class="mt-2 ml-4">
+            @for (subfolder of folder.subfolders; track subfolder.id) {
+              <li class="mb-2">
+                <div
+                  (click)="toggleFolder(subfolder)"
+                  (keydown)="handleKeydown($event, subfolder)"
+                  tabindex="0"
+                  class="flex items-center cursor-pointer"
+                >
+                  @if (subfolder.expanded) {
+                    <span class="mr-2">-</span>
+                  } @else {
+                    <span class="mr-2">+</span>
+                  }
+                  {{ subfolder.name }}
+                </div>
+                @if (subfolder.expanded) {
+                  <ul class="mt-2 ml-4">
+                    @for (file of subfolder.files; track file.id) {
+                      <li class="mb-2">
+                        <div class="cursor-pointer" tabindex="0">{{ file.name }}</div>
+                      </li>
+                    }
+                  </ul>
+                }
+              </li>
+            }
+          </ul>
+        }
+      </li>
+    }
+  </ul>
+</div>
