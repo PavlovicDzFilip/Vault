@@ -27,7 +27,7 @@
         <ProjectReference Include="..\Common\Common.csproj" />
     </ItemGroup>
 
-    <PropertyGroup Label="OpenApi">
+    <PropertyGroup Label="OpenApi" Condition="">
         <OpenApiGenerateDocuments>true</OpenApiGenerateDocuments>
         <OpenApiDocumentsDirectory>$(MSBuildProjectDirectory)\..\WebApplication\src\generated</OpenApiDocumentsDirectory>
     </PropertyGroup>

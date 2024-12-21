@@ -2,6 +2,9 @@
   "name": "think-twice",
   "version": "0.0.0",
   "scripts": {
+    "generate-api": "node openapi-gen.js",
+    "prestart": "yarn generate-api",
+    "prebuild": "yarn generate-api",
     "start": "ng serve",
     "dev": "ng serve -c development",
     "prod": "ng serve -c production",
@@ -14,6 +17,7 @@
     "format": "prettier --write \"src/**/*.{ts,html}\""
   },
   "private": true,
+  "type": "module",
   "dependencies": {
     "@angular/animations": "^19.0.0",
     "@angular/common": "^19.0.0",
@@ -40,6 +44,7 @@
     "eslint": "^9.16.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.2.1",
+    "openapi-types": ">=7",
     "orval": "^7.3.0",
     "postcss": "^8.4.49",
     "prettier": "^3.4.2",

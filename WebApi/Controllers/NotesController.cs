@@ -9,7 +9,7 @@ public class NotesController(NoteRepository noteRepository)
     : ControllerBase
 {
     [HttpGet]
-    public async Task<IEnumerable<NoteListItem>> Get(CancellationToken cancellationToken)
+    public async Task<IEnumerable<NoteListItem>> GetAll(CancellationToken cancellationToken)
     {
         var notes = await noteRepository.GetAll(cancellationToken);
 
