@@ -11,12 +11,13 @@ Startup.Configure(builder.Services, builder.Configuration);
 
 builder.Services.AddControllers(options => options.Filters.Add<UnitOfWorkFilter>());
 
+builder.Services.AddCors(
+    cors => cors.AddPolicy("AllowAll", 
+        policy => policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()));
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddOpenApi(options =>
-{
-    options.AddOperationTransformer<OperationIdFilter>();
-});
+builder.Services.AddOpenApi(options => { options.AddOperationTransformer<OperationIdFilter>(); });
 
 var app = builder.Build();
 
@@ -27,6 +28,7 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
+app.UseCors("AllowAll");
 app.UseHttpsRedirection();
 
 app.UseAuthorization();

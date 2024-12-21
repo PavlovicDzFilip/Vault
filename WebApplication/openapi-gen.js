@@ -21,7 +21,6 @@ const config = {
     output: {
       mode: 'tags-split',
       target: path.join(targetDirectory, 'api.ts'),
-      fileExtension: '.gen.ts',
       client: 'angular',
     },
     input: {
