@@ -1,22 +1,59 @@
-import { Component, inject, OnInit } from '@angular/core';
-import { NotesService } from '../../../generated/openapi/notes/notes.service';
-import { NoteListItem } from '../../../generated/openapi/api.schemas';
+import { Component, signal } from '@angular/core';
+import { Folder } from '@features/tabs/models/Tab';
 
 @Component({
   selector: 'app-sidebar',
   imports: [],
   templateUrl: './sidebar.component.html'
 })
-export class SidebarComponent implements OnInit {
-  readonly #client = inject(NotesService)
+export class SidebarComponent {
+  folders = signal<Folder[]>([
+    {
+      id: 0,
+      name: 'Folder 1',
+      expanded: false,
+      subfolders: [],
+      files: []
+    },
+    {
+      id: 1,
+      name: 'Folder 2',
+      expanded: false,
+      subfolders: [
+        {
+          id: 6,
+          name: 'Folder 3',
+          expanded: false,
+          subfolders: [],
+          files: [],
+        },
+        {
+          id: 7,
+          name: 'Folder 5',
+          expanded: false,
+          subfolders: [],
+          files: [],
+        },
+      ],
+      files: []
+    }, {
+      id: 11,
+      name: 'Folder 3',
+      expanded: false,
+      subfolders: [],
+      files: []
+    }]);
 
-  protected notes: NoteListItem[]=[]
-  
-  ngOnInit(): void {
-    this.#client.getAll()
-      .subscribe(notes=> {
-        console.log(notes)
-        this.notes = notes;
-      })
+  toggleFolder(folder: Folder): void {
+    if (folder.subfolders.length === 0) { return; }
+
+    folder.expanded = !folder.expanded;
+    this.folders.set([...this.folders()]);
+  }
+
+  handleKeydown(event: KeyboardEvent, folder: Folder): void {
+    if (event.key === 'Enter' || event.key === ' ') {
+      this.toggleFolder(folder);
+    }
   }
 }
