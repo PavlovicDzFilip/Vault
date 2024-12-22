@@ -24,6 +24,7 @@
       "@lib/*": ["src/app/shared/*"],
       "@layout/*": ["src/app/layout/*"],
       "@features/*": ["src/app/features/*"],
+      "@api/*": ["src/generated/openapi/*"]
     },
   },
   "angularCompilerOptions": {
