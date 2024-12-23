@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, input, OnInit } from '@angular/core';
 
 import { EditorComponent } from '@features/editor/editor.component';
 import { TabsComponent } from '@features/tabs/tabs.component';
@@ -10,6 +10,10 @@ import { ToolbarComponent } from '@features/toolbar/toolbar.component';
   imports: [EditorComponent, TabsComponent, SidebarComponent, ToolbarComponent],
   templateUrl: './layout.component.html'
 })
-export class LayoutComponent {
+export class LayoutComponent implements OnInit {
+  noteId = input<string | undefined>();
 
+  ngOnInit(): void {
+    console.log(this.noteId());
+  }
 }

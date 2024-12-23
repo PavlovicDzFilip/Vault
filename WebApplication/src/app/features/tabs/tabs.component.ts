@@ -12,15 +12,12 @@ export class TabsComponent {
   tabs = signal<Tab[]>([{
     id: 0,
     name: 'Note name 1',
-    icon: 'set/path/to/icon',
   }, {
     id: 1,
     name: 'Note name 2',
-    icon: 'set/path/to/icon',
   }, {
     id: 2,
     name: 'Note name 3',
-    icon: 'path/to/icon',
   }]);
 
   activeTabIndex = signal<number>(0);
@@ -33,5 +30,15 @@ export class TabsComponent {
     console.log(tab);
     // Remove the tab
     this.tabs.set(this.tabs().filter(t => t.id !== tab));
+  }
+
+  createNote() {
+    const newTab = {
+      id: this.tabs().length,
+      name: `Note name ${this.tabs().length + 1}`,
+    };
+
+    this.tabs.set([...this.tabs(), newTab]);
+    this.activeTabIndex.set(this.tabs().length - 1);
   }
 }

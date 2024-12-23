@@ -1,54 +1,22 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
-import { Folder } from '@features/tabs/models/Tab';
+import { NgTemplateOutlet } from '@angular/common';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { Folder, File } from '@features/tabs/models/Tab';
+import { DraggableDirective } from './directives/draggable.directive';
+import { Router } from '@angular/router';
 import { NoteListItem } from '@api/api.schemas';
-import { NotesService } from '@api/notes/notes.service';
 
 @Component({
   selector: 'app-sidebar',
-  standalone: true,
-  imports: [],
+  imports: [NgTemplateOutlet, DraggableDirective],
   templateUrl: './sidebar.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SidebarComponent implements OnInit {
-  folders = signal<Folder[]>([
-    {
-      id: 0,
-      name: 'Folder 1',
-      expanded: false,
-      subfolders: [],
-      files: [],
-    },
-    {
-      id: 1,
-      name: 'Folder 2',
-      expanded: false,
-      subfolders: [
-        {
-          id: 6,
-          name: 'Folder 3',
-          expanded: false,
-          subfolders: [],
-          files: [],
-        },
-        {
-          id: 7,
-          name: 'Folder 5',
-          expanded: false,
-          subfolders: [],
-          files: [],
-        },
-      ],
-      files: [],
-    }, {
-      id: 11,
-      name: 'Folder 3',
-      expanded: false,
-      subfolders: [],
-      files: [],
-    }]);
-  notes = signal<NoteListItem[]>([]);
+export class SidebarComponent {
+  readonly #router = inject(Router);
 
-  #notesService = inject(NotesService);
+  protected sidebarWidth = signal<number>(180);
+  protected folders = signal<Folder[]>([]);
+  protected notes = signal<NoteListItem[]>([]);
 
   toggleFolder(folder: Folder): void {
     if (folder.subfolders.length === 0) {
@@ -65,10 +33,16 @@ export class SidebarComponent implements OnInit {
     }
   }
 
-  ngOnInit() {
-    this.#notesService.getAll()
-      .subscribe(notes => {
-        this.notes.set(notes);
-      })
+  openFile(file: File): void {
+    console.log('call action from service to open this file ->', file);
+    this.#router.navigate([file.id.toString()]);
+  }
+
+  onDragging(event: MouseEvent): void {
+    if (event.clientX < 150 || event.clientX > 300) {
+      return;
+    }
+
+    this.sidebarWidth.set(event.clientX);
   }
 }
