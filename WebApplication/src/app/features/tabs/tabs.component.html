@@ -1,7 +1,7 @@
 <div class="flex p-1 space-x-1 w-max">
   @for (tab of tabs(); track tab.id) {
     <button
-      class="flex items-center gap-2 px-3 py-2 transition-all duration-200 ease-in-out rounded-md"
+      class="relative flex items-center gap-2 px-3 py-2 transition-all duration-200 ease-in-out rounded-md group"
       [ngClass]="{
         'bg-primary text-primary-foreground shadow-md': activeTabIndex() === tab.id,
         'hover:bg-muted': activeTabIndex() !== tab.id,
@@ -10,18 +10,33 @@
       (keydown.enter)="setActiveTab(tab.id)"
       tabindex="0"
     >
-      <img [src]="tab.icon" [alt]="tab.name" class="w-4 h-4" />
+      <img src="svgs/note-icon.svg" [alt]="tab.name" class="w-4 h-4" />
       <span class="hidden sm:inline">{{ tab.name }}</span>
       <span
-        class="hidden sm:inline"
         (click)="removeTab(tab.id)"
         (keydown.enter)="removeTab(tab.id)"
         tabindex="0"
-        class="w-4 h-4 transition-opacity opacity-0 group-hover:opacity-100 hover:text-destructive"
+        class="absolute left-[90%] bottom-[80%] w-4 h-4 transition-opacity opacity-0 group-hover:opacity-100 hover:text-destructive"
         (click)="removeTab(tab.id)"
-      ></span>
+      >
+        <img src="svgs/close-icon.svg" alt="Close tab" />
+      </span>
     </button>
   } @empty {
-    <p class="text-muted">No tabs open.</p>
+    <div
+      class="flex items-center justify-between max-w-lg p-4 mx-auto bg-gray-100 rounded-lg shadow-md"
+    >
+      <p class="text-lg font-medium text-gray-700">Create a new note to get started</p>
+      <div class="flex items-center gap-2">
+        <!-- Right Arrow -->
+        <span class="text-xl text-blue-500">&#8594;</span>
+        <button
+          class="px-4 py-2 font-semibold text-white bg-blue-500 rounded-full hover:bg-blue-600 active:bg-blue-700 focus:ring focus:ring-blue-300"
+          (click)="createNote()"
+          >
+          Create Note
+        </button>
+      </div>
+    </div>
   }
 </div>

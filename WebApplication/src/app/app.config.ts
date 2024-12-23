@@ -1,16 +1,16 @@
 import { ApplicationConfig, provideExperimentalZonelessChangeDetection } from '@angular/core';
-import { provideRouter } from '@angular/router';
+import { provideRouter, withComponentInputBinding } from '@angular/router';
 
 import { routes } from './app.routes';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { provideQuillConfig } from 'ngx-quill';
-import { setBaseUrl } from './httpInterceptors/setBaseUrlInterceptor';
+import { authInterceptor, setBaseUrlInterceptor } from '@core/interceptors';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideExperimentalZonelessChangeDetection(),
-    provideRouter(routes),
-    provideHttpClient(withInterceptors([setBaseUrl])),
+    provideRouter(routes, withComponentInputBinding()),
+    provideHttpClient(withInterceptors([setBaseUrlInterceptor, authInterceptor])),
     provideQuillConfig({
       modules: {
         syntax: true,
