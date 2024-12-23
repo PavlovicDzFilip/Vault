@@ -30,13 +30,6 @@
         }
       </li>
     }
-
-    @for (note of notes(); track note.id) {
-      <li class="mb-2">
-        <div>{{ note.title }}</div>
-        <div>Modified at: {{ note.modifiedAt }}</div>
-      </li>
-    }
   </ul>
 
   <ng-template #recursiveList let-subfolders let-files>
