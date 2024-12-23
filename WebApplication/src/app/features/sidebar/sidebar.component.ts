@@ -1,7 +1,7 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
-import { Folder } from '@features/tabs/models/Tab';
-import { NoteListItem } from '@api/api.schemas';
 import { NotesService } from '@api/notes/notes.service';
+import { NoteListItem } from '@api/schemas';
+import { Folder } from '@features/tabs/models/Tab';
 
 @Component({
   selector: 'app-sidebar',
@@ -39,13 +39,15 @@ export class SidebarComponent implements OnInit {
         },
       ],
       files: [],
-    }, {
+    },
+    {
       id: 11,
       name: 'Folder 3',
       expanded: false,
       subfolders: [],
       files: [],
-    }]);
+    },
+  ]);
   notes = signal<NoteListItem[]>([]);
 
   #notesService = inject(NotesService);
@@ -66,9 +68,8 @@ export class SidebarComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.#notesService.getAll()
-      .subscribe(notes => {
-        this.notes.set(notes);
-      })
+    this.#notesService.getAll().subscribe((notes) => {
+      this.notes.set(notes);
+    });
   }
 }
